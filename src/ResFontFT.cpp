@@ -114,6 +114,9 @@ namespace oxygine
 		int _size;
 		bool loadGlyph(int code, glyph& g) OVERRIDE
 		{
+            if (code == '\n')
+                return false;
+
 			FT_Face face = _rs->_face;
 			FT_Set_Pixel_Sizes(_rs->_face, 0, _size);
 

@@ -1,30 +1,32 @@
 cmake_minimum_required (VERSION 2.6)
 project (OXYGINE_FREETYPE)
 
-if (EMSCRIPTEN)
-	set(CMAKE_CXX_FLAGS "-Wno-warn-absolute-paths")
-	message(status emscripten)
-	set(OXYGINEMAGICPARTICLES_INCLUDE_DIRS 
-		${CMAKE_CURRENT_SOURCE_DIR}/src
-		${CMAKE_CURRENT_SOURCE_DIR}/magic_particles/emscripten)
+find_package(Freetype REQUIRED)
 
-	set(OXYGINEMAGICPARTICLES_LIBS
-		${CMAKE_CURRENT_SOURCE_DIR}/magic_particles/emscripten/libmagic.a)
+if (EMSCRIPTEN)
+        set(CMAKE_CXX_FLAGS "-Wno-warn-absolute-paths")
+        message(status emscripten)
+        set(OXYGINEMAGICPARTICLES_INCLUDE_DIRS 
+                ${CMAKE_CURRENT_SOURCE_DIR}/src
+                ${CMAKE_CURRENT_SOURCE_DIR}/magic_particles/emscripten)
+
+        set(OXYGINEMAGICPARTICLES_LIBS
+                ${CMAKE_CURRENT_SOURCE_DIR}/magic_particles/emscripten/libmagic.a)
 
 else(EMSCRIPTEN)
-	set(OXYGINE_FREETYPE_INCLUDE_DIRS 
-		${CMAKE_CURRENT_SOURCE_DIR}/src
-		${CMAKE_CURRENT_SOURCE_DIR}/freetype/win32/include)
-
-	set(OXYGINE_FREETYPE_LIBS
-		${CMAKE_CURRENT_SOURCE_DIR}/freetype/win32/libs/freetype.lib)
+        set(OXYGINE_FREETYPE_INCLUDE_DIRS 
+                ${CMAKE_CURRENT_SOURCE_DIR}/src
+                ${CMAKE_CURRENT_SOURCE_DIR}/freetype/win32/include)
 endif(EMSCRIPTEN)
 
 include_directories(${OXYGINE_FREETYPE_INCLUDE_DIRS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_library(oxygine-freetype STATIC 
-	src/ResFontFT.cpp 
-	src/ResFontFT.h
+        src/ResFontFT.cpp 
+        src/ResFontFT.h
 )
+
+target_link_libraries(oxygine-freetype ${FREETYPE_LIBRARIES})
 
 #target_link_libraries(oxyginemagicparticles)
 
